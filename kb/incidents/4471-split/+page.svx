@@ -2,9 +2,9 @@
 layout: runbook
 title: '#4471 wasn''t one issue — it was two'
 owner: tomaszlis
-status: proposed
+status: resolved
 reviewed: 2026-10-05
-signature: tomaszlis
+signature: v1.eyJzdWIiOiIxMjMzNSIsImF1ZCI6ImNoYWxsZW5nZTp3aGF0LWl0LXNob3dzIiwiaWF0IjoxNzk1MDM3NDk4LCJleHAiOjE3OTUxMjM4OTh9.TlCQkw5KSRq5mTgFBWkBplXgTPC6qHxYIQr0-cmpAk8
 ---
 
 <script>
@@ -12,7 +12,7 @@ signature: tomaszlis
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 
-  const signature = 'tomaszlis';
+  const signature = 'v1.eyJzdWIiOiIxMjMzNSIsImF1ZCI6ImNoYWxsZW5nZTp3aGF0LWl0LXNob3dzIiwiaWF0IjoxNzk1MDM3NDk4LCJleHAiOjE3OTUxMjM4OTh9.TlCQkw5KSRq5mTgFBWkBplXgTPC6qHxYIQr0-cmpAk8';
 </script>
 
 [#4471](/kb/incidents/4471) was merged by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)):
@@ -41,12 +41,15 @@ stays inside that one ticket rather than a third of its own.
    shared parser reads every date month-first, flipping it for every day-first-locale
    tenant on `app`/`email` and on `booking-v2` forms. This is `#4471`'s real, majority
    cause — the row the table above marks as this ticket's own. 379 reports, including the
-   5 `oneDayMove`-footnoted ones.
+   5 `oneDayMove`-footnoted ones. **Fixed** — `fix(dates): parse dd/mm for eu locales`.
 2. **[Wrong form hint on booking-v3](https://github.com/tomaszlis/firstrepo/issues/2)** —
    a different bug, same-looking symptom: three tenants on `booking-v3` see a
    `MM/DD/YYYY` hint despite being day-first locales. Channel-specific (`form` only),
    so it can't be the shared parser. The table marks this cause `wrong` for `#4471`: "not
-   this ticket — no ticket of its own," until now. 33 reports.
+   this ticket — no ticket of its own," until now. 33 reports. **Won't fix** —
+   `booking-v3` form retired.
+
+Per the desk's engineering update on #4471, closed 05 Oct.
 
 ## Lesson
 
