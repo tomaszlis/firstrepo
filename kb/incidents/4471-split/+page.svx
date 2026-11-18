@@ -1,0 +1,62 @@
+---
+layout: runbook
+title: '#4471 wasn''t one issue — it was three'
+owner: tomaszlis
+status: proposed
+reviewed: 2026-10-05
+signature: tomaszlis
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const signature = 'tomaszlis';
+</script>
+
+[#4471](/kb/incidents/4471) was merged by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)):
+"the desk merges on subject alone; nobody has to read the body." Reading the bodies and
+checking cause instead, not just subject, splits it into three bugs with three different
+fixes.
+
+<Callout kind="warn">
+Filing one ticket per cause here, each with its count. #4471 stays open for the one cause
+that is actually its majority cause; the other two get their own tickets below.
+</Callout>
+
+## What's actually in here
+
+<CauseTable ticket={4471} />
+
+The table above is this page's only source of these numbers — it runs the same
+`causes.ts` logic live against `reports-4471.json` and `desk-notes.json`, the same way the
+original #4471 page does. Nothing below is typed in by hand.
+
+## The three tickets
+
+1. **[Parser flips month/day](https://github.com/tomaszlis/firstrepo/issues/1)** — the
+   shared parser reads every date month-first, flipping it for every day-first-locale
+   tenant on `app`/`email` and on `booking-v2` forms. This is `#4471`'s real, majority
+   cause — the row the table above marks as this ticket's own.
+2. **[Wrong form hint on booking-v3](https://github.com/tomaszlis/firstrepo/issues/2)** —
+   a different bug, same-looking symptom: three tenants on `booking-v3` see a
+   `MM/DD/YYYY` hint despite being day-first locales. Channel-specific (`form` only),
+   so it can't be the shared parser. The table marks this cause `wrong` for `#4471`: "not
+   this ticket — no ticket of its own," until now.
+3. **[A one-day shift, not a swap](https://github.com/tomaszlis/firstrepo/issues/3)** — 5
+   reports that `desk-notes.json`'s `oneDayMove` list already set apart as read
+   differently from their filed cause, but which never got split out. Not a digit-order
+   bug at all: dates land exactly one day off, which a month/day swap mostly can't
+   produce.
+
+## Lesson
+
+Subject-line dedupe is fast and that's the right trade during an incident
+([triage](/kb/triage/dedupe) says so, and it's still right). But "known: one issue, one
+fix queued" was true of the subject line, not of the reports. A ticket this size is worth
+one pass through `causes.ts` before the fix ships — the signal was already sitting in data
+the desk exports, in a footnote (`oneDayMove`) it had already written and a channel column
+it already collects.
+
+<RenderStamp {signature} />
